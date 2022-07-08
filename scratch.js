@@ -49,7 +49,7 @@ var createScratchOrg = function(alias, edition, features, settings, ttl){
         //Open the newly-created scratch org in a browser window
         sfdx.open(optionOpen);
         //  Push local code into the newly-created scratch org
-        //sfdx.push(optionsPush);
+        sfdx.push(optionsPush);
     } catch(error){
 
     }
