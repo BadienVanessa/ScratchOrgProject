@@ -12,10 +12,10 @@ var bodyParser = require('body-parser');
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-var createScratchOrg = function(alias,targetusername, branchName,ttl){
+var createScratchOrg = function(remoteBranchName,targetusername,alias,projectScratchDefJson,InfoScratchOrg,time,branchName){
     //Create a new local branch
+    var gitPull = `git pull origin ${remoteBranchName}`;
     var gitBranch = `git branch ${branchName}`;
-    // var gitPushBranch = `git push -u origin ${branchName}`;
 
 
     //createFile(alias, edition, features, settings);
@@ -23,15 +23,15 @@ var createScratchOrg = function(alias,targetusername, branchName,ttl){
     var passwordDisplay = `sfdx force:user:display --targetusername ${alias}`;
     // var exportDataOrg = `sfdx force:data:tree:export -q "SELECT FIELDS(ALL) FROM ${Objects} LIMIT 200" -u ${targetusername} -d ${folderName} -p`;
     // var importDataScratchOrg = `sfdx force:data:tree:import -u ${alias} -p ${folderName}${path.sep}${Objects}-plan.json`;
-    var startExportImport = `sfdx sfdmu:run --sourceusername ${targetusername} --targetusername ${alias}`;
+    //var ExportImport = `sfdx sfdmu:run --sourceusername ${targetusername} --targetusername ${alias}`;
     var exportDataOrg = `sfdx sfdmu:run --sourceusername ${targetusername} --targetusername csvfile`;
-    var importDataScratchOrg = `sfdx sfdmu:run --sourceusername csvfile --targetusername ${targetusername}`;
+    var importDataScratchOrg = `sfdx sfdmu:run --sourceusername csvfile --targetusername ${alias}`;
 
 
 
 
     //create scratch org
-    let optionsCreate = {alias : alias, days : ttl, definitionfile: './config/project-scratch-def.json'};
+    let optionsCreate = {alias : alias, days : time, definitionfile: `${projectScratchDefJson}`};
     var optionsLogin = {alias : alias, devhub : true,sandbox: false};
     var optionsOrgInfo = {alias : alias, user : true};
     var optionOpen = {alias : alias};
@@ -39,13 +39,9 @@ var createScratchOrg = function(alias,targetusername, branchName,ttl){
     
 
 
-    try{  
-        //Connects an org to this project via web login.
-        sfdx.login(optionsLogin);
-        // Create a new scratch org
-        sfdx.create(optionsCreate);
-        // Use following console command to start the export from one Org to another:
-        exec(startExportImport, (error, stdout) => {
+    try{ 
+        //This command do the pull in git 
+        exec(gitPull, (error, stdout) => {
             if (error) {
                 console.log(`error: ${error.message}`);
             }
@@ -54,6 +50,10 @@ var createScratchOrg = function(alias,targetusername, branchName,ttl){
             }
            
         });
+        //Connects an org to this project via web login.
+        sfdx.login(optionsLogin);
+        // Create a new scratch org
+        sfdx.create(optionsCreate);
         // export data from an org by creating a folder and files that will contain this data  
         exec(exportDataOrg, (error, stdout) => {
             if (error) {
@@ -64,15 +64,7 @@ var createScratchOrg = function(alias,targetusername, branchName,ttl){
             }
            
         });
-        //Create a new local branch
-        exec(gitBranch, (error, stdout) => {
-            if (error) {
-                console.log(`error: ${error.message}`);
-            }
-            if (stdout) {
-                console.log(`stdout: ${stdout}`);
-            }
-        });
+        //generate the password of Scratch Org
         exec(passwordScratchOrg, (error, stdout) => {
             if (error) {
                 console.log(`error: ${error.message}`);
@@ -93,7 +85,7 @@ var createScratchOrg = function(alias,targetusername, branchName,ttl){
         });
         //  Gets info about an org
         sfdx.orgInfo(optionsOrgInfo).then(result=>{
-            fs.writeFileSync('./config/infos.json',JSON.stringify(result));
+            fs.writeFileSync(`${InfoScratchOrg}`,JSON.stringify(result));
         }).catch(err =>{
              console.error(err);
         });
@@ -111,40 +103,56 @@ var createScratchOrg = function(alias,targetusername, branchName,ttl){
             }
            
         });
+        //Create a new local branch
+        exec(gitBranch, (error, stdout) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+            }
+            if (stdout) {
+                console.log(`stdout: ${stdout}`);
+            }
+        });
     } catch(error){
 
     }
 }
-
+//declaration of static data like css, image,...
+app.use(express.static(path.join(__dirname, 'public')));
+//connection with html file
 app.get('/scratch.html', function (req, res) {
     res.sendFile( __dirname + "/" + "scratch.html" );
- })
- 
- var server = app.listen(8081, function () {
+})
+var server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
-    
     console.log("Example app listening at http://%s:%s", host, port)
  })
 var responses={};
- app.post('/process_post', urlencodedParser, function (req, res) {
-    // Prepare output in JSON format
+app.post('/process_post', urlencodedParser, function (req, res) {
+    // Prepare output in JSON
     response = {
-        bodyAlias:req.body.alias_name,
+        bodyRemoteBranch:req.body.remote_branch_name,
         bodyOrg:req.body.org_name,
-        bodyBranch:req.body.branch_name,
-        bodyTime:req.body.time
+        bodyAlias:req.body.alias_name,
+        bodyProjectScratchDefJson:req.body.project_Scratch_Def_Json,
+        bodyInfoScratchOrg:req.body.Info_Scratch_Org,
+        bodyTime:req.body.time,
+        bodyBranch:req.body.branch_name
     };
     responses=response;
     console.log(response);
 
-   var paramAlias =response.bodyAlias ;
-   var paramOrg = response.bodyOrg;
-   var paramBranch = response.bodyBranch;
-   var paramTime = response.bodyTime;
-    createScratchOrg(paramAlias,paramOrg,paramBranch,paramTime);
+    var paramRemoteBranch = response.bodyRemoteBranch;
+    var paramOrg = response.bodyOrg;
+    var paramAlias =response.bodyAlias ;
+    var paramProjectScratchDefJson =response.bodyProjectScratchDefJson ;
+    var paramInfoScratchOrg =response.bodyInfoScratchOrg ;
+    var paramTime = response.bodyTime;
+    var paramBranch = response.bodyBranch;
+   
+    createScratchOrg(paramRemoteBranch,paramOrg,paramAlias,paramProjectScratchDefJson,paramInfoScratchOrg,paramTime,paramBranch);
     res.end(JSON.stringify(response));
- })
+})
 
  
 
