@@ -43,11 +43,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.0",
-    "child-process": "^1.0.2",
     "child_process": "^1.0.2",
+    "child-process": "^1.0.2",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.1",
-    "fs": "0.0.1-security",
+    "fs": "^0.0.1-security",
     "multer": "^1.4.5-lts.1",
     "path": "^0.12.7",
     "sfdx": "^1.4.2"
