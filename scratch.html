@@ -1,26 +1,42 @@
 <html>
   <head>
     <title>Scratch org automation</title>
+
     <link rel="stylesheet" href="/css/scratch.css" />
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="/images/favicon.png">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
   </head>
   <body>
     <form action = "http://127.0.0.1:8081/process_post" method = "POST">
-      <img src="/images/favicon.png" alt="" class="icon">
-      <h1 class="scrat">SCRATCH ORG AUTOMATION</h1>
+      <div class="zoom">
+        <div class="image">
+          <img src="/images/favicon.png" alt="" class="icon">
+        </div>
+      </div>
+      <h1 class="ml2 ">SCRATCH ORG AUTOMATION</h1>
       <b>
-        Remote Branch      : <br><input class="data" type = "text" name = "remote_branch_name" placeholder="remote branch name"><br><br>
-        Org         : <br><input class="data" type = "text" name = "org_name" placeholder="Org Name"><br><br>
-        Alias       : <br><input class="data" type = "text" name = "alias_name" placeholder="Aliases of your Scratch org"><br><br>
-        Project_Scratch_Def_Json    : <br><input class="" type = "file" id="file" name = "project_Scratch_Def_Json" placeholder="Enter the path of file"><br><br>
-        Name Path File Infos       : <br><input class="data" type = "text" name = "Info_Scratch_Org" placeholder="Enter the path of file"><br><br>
-        Time Scratch: <br><input class="data" type="text" name = "time" placeholder="Time scrtach org max 30 days"><br><br>
-        Branch      : <br><input class="data" type = "text" name = "branch_name" placeholder="Branch Name"><br><br>
-        <input class="validation" type = "submit" value = "Create Scractch Org" >
+        <label for="avatar">Remote Branch :</label><br>
+        <input class="data" type = "text" name = "remote_branch_name" placeholder="remote branch name" size="25"><br><br>
+        <label for="avatar">Org :</label><br>
+        <input class="data" type = "email" name = "org_name" placeholder="https://brave-impala-fqpt2r-dev-ed.lightning.force.com" size="25"><br><br>
+        <label for="avatar">Alias:</label><br>
+        <input class="data" type = "text" name = "alias_name" placeholder="Aliases of your Scratch org" size="25"><br><br>
+        <label for="avatar">Project_Scratch_Def_Json :</label><br>
+        <!-- <input class="" type = "file" id="file" name = "project_Scratch_Def_Json" placeholder="Enter the path of file" accept=".json"><br><br> -->
+        <input class="data" type = "text" name = "project_Scratch_Def_Json" placeholder="./config/project-scratch-def.json" size="25"><br><br>
+        <label for="avatar">Name Path File Infos :</label><br>
+        <input class="data" type = "text" name = "Info_Scratch_Org" placeholder="Enter the path and name of file" size="25"><br><br>
+        <label for="avatar">Time Scratch :</label><br>
+        <input class="data" id="number" type="number" name = "time" min="1" max="30" placeholder="Time scrtach org max 30 days"><br><br>
+        <label for="avatar">Branch :</label><br>
+        <input class="data" type = "text" name = "branch_name" placeholder="Branch Name" size="25"><br><br>
+        <input class="validation" type = "submit" value = "Create Scractch Org">
       </b>
       <br>
       <br>
     </form>
+    <script type="text/javaScript" src="/js/script.js"></script>
   </body>
 </html>
