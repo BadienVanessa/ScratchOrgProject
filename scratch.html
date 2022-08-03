@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
   </head>
   <body>
-    <form id="login_form" name="myForm" action = "http://127.0.0.1:8081/process_post" onsubmit="return validateForm()" method = "POST">
+    <form id="login_form" name="myForm" action = "http://127.0.0.1:8081/process_post" method = "POST">
       <div class="zoom">
         <div class="image">
           <img src="/images/favicon.png" alt="" class="icon">
@@ -43,7 +43,6 @@
       const form = document.getElementById('login_form');
 
       form.addEventListener('submit', function(event){
-        event.preventDefault();
 
         var pull_branch_name_Submit=document.myForm.pull_branch_name.value; 
         var org_name_Submit=document.myForm.org_name.value; 
@@ -64,7 +63,7 @@
           text = "Please enter the name of your scratch org"; 
           document.getElementById("Warning").innerHTML = text;
           event.preventDefault();
-        }else if(project_Scratch_Def_Json_Submit == "" || project_Scratch_Def_Json_Submit == "./" || project_Scratch_Def_Json_Submit == "./config") {
+        }else if(project_Scratch_Def_Json_Submit == "") {
           text = "Please enter the good path of your file 1"; 
           document.getElementById("Warning").innerHTML = text;
           event.preventDefault();
@@ -76,6 +75,9 @@
           text = "Please enter the duration of your scratch org"; 
           document.getElementById("Warning").innerHTML = text;
           event.preventDefault();
+        }else{
+          text = "your request is being executed please wait...";
+          document.getElementById("Warning").innerHTML = text;
         }
       })
     </script>

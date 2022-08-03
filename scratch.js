@@ -154,7 +154,7 @@ app.post('/process_post', urlencodedParser, function (req, res) {
         bodyBranch:req.body.branch_name
     };
     console.log(response);
-    res.end(JSON.stringify(response));
+    //res.end(JSON.stringify(response));
 
     var parampullBranchName = response.bodypullBranchName;
     var paramOrg = response.bodyOrg;
