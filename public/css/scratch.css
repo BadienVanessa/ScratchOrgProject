@@ -105,3 +105,11 @@ input{
 #number{
     width: 23em;
 }
+
+#Warning {
+    color: brown;
+}
+
+.requi{
+    color: rgb(168, 44, 44);
+}

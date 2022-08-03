@@ -3,7 +3,15 @@ const sfdx = require ('sfdx');
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
+var argv = require('minimist')(process.argv.slice(2));
+console.log(argv);
 //const sfdx = require('sfdx-node');
+
+
+openInterface = argv.s
+if (openInterface=='start') {
+    exec('start http://127.0.0.1:8081/scratch.html')
+}
 
 //It facilitates the rapid development of Node based Web applications
 var express = require('express');
@@ -12,10 +20,11 @@ var bodyParser = require('body-parser');
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-var createScratchOrg = function(remoteBranchName,targetusername,alias,projectScratchDefJson,InfoScratchOrg,time,branchName){
+var createScratchOrg = function(pullBranchName,targetusername,alias,projectScratchDefJson,InfoScratchOrg,time,branchName){
     //Create a new local branch
-    var gitPull = `git pull origin ${remoteBranchName}`;
+    var gitPull = `git pull origin ${pullBranchName}`;
     var gitBranch = `git branch ${branchName}`;
+    var gitswitchBranch = `git switch ${branchName}`;
 
 
     //createFile(alias, edition, features, settings);
@@ -104,6 +113,15 @@ var createScratchOrg = function(remoteBranchName,targetusername,alias,projectScr
                 console.log(`stdout: ${stdout}`);
             }
         });
+        //switch the new branch
+        exec(gitswitchBranch, (error, stdout) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+            }
+            if (stdout) {
+                console.log(`stdout: ${stdout}`);
+            }
+        });
     } catch(error){
 
     }
@@ -127,7 +145,7 @@ var server = app.listen(8081, function () {
 app.post('/process_post', urlencodedParser, function (req, res) {
     // Prepare output in JSON
     response = {
-        bodyRemoteBranch:req.body.remote_branch_name,
+        bodypullBranchName:req.body.pull_branch_name,
         bodyOrg:req.body.org_name,
         bodyAlias:req.body.alias_name,
         bodyProjectScratchDefJson:req.body.project_Scratch_Def_Json,
@@ -136,16 +154,16 @@ app.post('/process_post', urlencodedParser, function (req, res) {
         bodyBranch:req.body.branch_name
     };
     console.log(response);
-    res.end(JSON.stringify(response));
+    //res.end(JSON.stringify(response));
 
-    var paramRemoteBranch = response.bodyRemoteBranch;
+    var parampullBranchName = response.bodypullBranchName;
     var paramOrg = response.bodyOrg;
     var paramAlias =response.bodyAlias ;
     var paramProjectScratchDefJson =response.bodyProjectScratchDefJson ;
     var paramInfoScratchOrg =response.bodyInfoScratchOrg ;
     var paramTime = response.bodyTime;
     var paramBranch = response.bodyBranch;
-    createScratchOrg(paramRemoteBranch,paramOrg,paramAlias,paramProjectScratchDefJson,paramInfoScratchOrg,paramTime,paramBranch);
+    createScratchOrg(parampullBranchName,paramOrg,paramAlias,paramProjectScratchDefJson,paramInfoScratchOrg,paramTime,paramBranch);
 })
 
 //On your browser enter the url "http://127.0.0.1:8081/scratch.html"

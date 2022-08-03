@@ -94,3 +94,38 @@ overlay.addEventListener("click", () => {
     }
   });
 });
+
+
+
+
+
+
+// //condition to validate the form
+// function validateForm() {
+//   let pull_branch_name_Submit = document.forms["myForm"]["pull_branch_name"].value;
+//   let org_name_Submit = document.forms["myForm"]["org_name"].value;
+//   let alias_name_Submit = document.forms["myForm"]["alias_name"].value;
+//   let project_Scratch_Def_Json_Submit = document.forms["myForm"]["project_Scratch_Def_Json"].value;
+//   let Info_Scratch_Org_Submit = document.forms["myForm"]["Info_Scratch_Org"].value;
+//   let time_Submit = document.forms["myForm"]["time"].value;
+
+//   if (pull_branch_name_Submit == "") {
+//     alert("Please enter the branch name");
+//     return false;
+//   }else if(org_name_Submit == "") {
+//     alert("Please enter the name of your organisation");
+//     return false;
+//   }else if(alias_name_Submit == "") {
+//     alert("Please enter the name of your scratch org");
+//     return false;
+//   }else if(project_Scratch_Def_Json_Submit == "" || project_Scratch_Def_Json_Submit == "./" || project_Scratch_Def_Json_Submit == "./config") {
+//     alert("Please enter the good path of your file 1");
+//     return false;
+//   }else if(Info_Scratch_Org_Submit == "") {
+//     alert("Please enter the good path of your file and a new name 2");
+//     return false;
+//   }else if(time_Submit == "") {
+//     alert("Please enter the duration of your scratch org");
+//     return false;
+//   }
+// }

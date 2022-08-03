@@ -1,4 +1,4 @@
-<html>
+<html lang="en">
   <head>
     <title>Scratch org automation</title>
 
@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
   </head>
   <body>
-    <form action = "http://127.0.0.1:8081/process_post" method = "POST">
+    <form id="login_form" name="myForm" action = "http://127.0.0.1:8081/process_post" method = "POST">
       <div class="zoom">
         <div class="image">
           <img src="/images/favicon.png" alt="" class="icon">
@@ -17,19 +17,20 @@
       </div>
       <h1 class="ml2 ">SCRATCH ORG AUTOMATION</h1>
       <b>
-        <label for="avatar">Remote Branch :</label><br>
-        <input class="data" type = "text" name = "remote_branch_name" placeholder="remote branch name" size="25"><br><br>
-        <label for="avatar">Org :</label><br>
-        <input class="data" type = "email" name = "org_name" placeholder="https://brave-impala-fqpt2r-dev-ed.lightning.force.com" size="25"><br><br>
-        <label for="avatar">Alias:</label><br>
-        <input class="data" type = "text" name = "alias_name" placeholder="Aliases of your Scratch org" size="25"><br><br>
-        <label for="avatar">Project_Scratch_Def_Json :</label><br>
+        <p id="Warning"></p>
+        <label for="avatar">Remote Branch <span class="requi">*</span>: </label><br>
+        <input class="data" type = "text" name = "pull_branch_name" placeholder="remote branch name" size="25"><br><br>
+        <label for="avatar">Org <span class="requi">*</span>: </label><br>
+        <input class="data" type = "email" name = "org_name" placeholder="https://brave-impala-fqpt2r-dev-ed.lightning.force.com" size="25" ><br><br>
+        <label for="avatar">Alias <span class="requi">*</span>: </label><br>
+        <input class="data" type = "text" name = "alias_name" placeholder="Aliases of your Scratch org" size="25" ><br><br>
+        <label for="avatar">Project_Scratch_Def_Json <span class="requi">*</span>:</label><br>
         <!-- <input class="" type = "file" id="file" name = "project_Scratch_Def_Json" placeholder="Enter the path of file" accept=".json"><br><br> -->
-        <input class="data" type = "text" name = "project_Scratch_Def_Json" placeholder="./config/project-scratch-def.json" size="25"><br><br>
-        <label for="avatar">Name Path File Infos :</label><br>
-        <input class="data" type = "text" name = "Info_Scratch_Org" placeholder="Enter the path and name of file" size="25"><br><br>
-        <label for="avatar">Time Scratch :</label><br>
-        <input class="data" id="number" type="number" name = "time" min="1" max="30" placeholder="Time scrtach org max 30 days"><br><br>
+        <input class="data" type = "text" name = "project_Scratch_Def_Json" placeholder="./config/project-scratch-def.json" size="25" ><br><br>
+        <label for="avatar">Name Path File Infos <span class="requi">*</span>:</label><br>
+        <input class="data" type = "text" name = "Info_Scratch_Org" placeholder="./config/new_Name.json" size="25" ><br><br>
+        <label for="avatar">Time Scratch <span class="requi">*</span>:</label><br>
+        <input class="data" id="number" type="number" name = "time" min="1" max="30" placeholder="Time scrtach org max 30 days" ><br><br>
         <label for="avatar">Branch :</label><br>
         <input class="data" type = "text" name = "branch_name" placeholder="Branch Name" size="25"><br><br>
         <input class="validation" type = "submit" value = "Create Scractch Org">
@@ -38,5 +39,47 @@
       <br>
     </form>
     <script type="text/javaScript" src="/js/script.js"></script>
+    <script>
+      const form = document.getElementById('login_form');
+
+      form.addEventListener('submit', function(event){
+
+        var pull_branch_name_Submit=document.myForm.pull_branch_name.value; 
+        var org_name_Submit=document.myForm.org_name.value; 
+        var alias_name_Submit=document.myForm.alias_name.value; 
+        var project_Scratch_Def_Json_Submit=document.myForm.project_Scratch_Def_Json.value; 
+        var Info_Scratch_Org_Submit=document.myForm.Info_Scratch_Org.value; 
+        var time_Submit=document.myForm.time.value; 
+         
+        if (pull_branch_name_Submit == ""){
+          text = "Please enter the branch name for the pull";
+          document.getElementById("Warning").innerHTML = text;
+          event.preventDefault();
+        }else if(org_name_Submit == "") {
+          text = "Please enter the name of your organisation"; 
+          document.getElementById("Warning").innerHTML = text;
+          event.preventDefault();
+        }else if(alias_name_Submit == "") {
+          text = "Please enter the name of your scratch org"; 
+          document.getElementById("Warning").innerHTML = text;
+          event.preventDefault();
+        }else if(project_Scratch_Def_Json_Submit == "") {
+          text = "Please enter the good path of your file 1"; 
+          document.getElementById("Warning").innerHTML = text;
+          event.preventDefault();
+        }else if(Info_Scratch_Org_Submit == "") {
+          text = "Please enter the good path of your file and a new name 2"; 
+          document.getElementById("Warning").innerHTML = text;
+          event.preventDefault();
+        }else if(time_Submit == "") {
+          text = "Please enter the duration of your scratch org"; 
+          document.getElementById("Warning").innerHTML = text;
+          event.preventDefault();
+        }else{
+          text = "your request is being executed please wait...";
+          document.getElementById("Warning").innerHTML = text;
+        }
+      })
+    </script>
   </body>
 </html>
